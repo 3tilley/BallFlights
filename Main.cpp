@@ -1,8 +1,12 @@
 #include <iostream>
+#include <ctime>
 #include <array>
 #define GLEW_STATIC
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
+
+bool const FULLSCREEN = false;
+bool const ENABLE_VSYNC = true;
 
 class Vector3 {
     std::array<double, 3> e;
@@ -69,6 +73,9 @@ Vector3 Update(double timestep, Vector3 position, Vector3 velocity = Vector3(), 
     return newPos;
 }
 
+// Buffer to average fps count
+//class CircularBuffer
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 int main() {
@@ -77,10 +84,17 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
+    GLFWwindow* window;
 
     // Make the window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
+    if (FULLSCREEN) {
+        window = glfwCreateWindow(2560, 1440, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
+    }
+    else {
+        window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
+    }
     if (window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -103,12 +117,45 @@ int main() {
 
     glfwSetKeyCallback(window, key_callback);
 
+    if (ENABLE_VSYNC) {
+        glfwSwapInterval(1);
+    }
+    else {
+        glfwSwapInterval(0);
+    }
+
+    bool alternator = true;
+    int fpsCounter = 0;
+    clock_t clockLastRefresh = clock();
+    int FPS_AVERAGE = 100;
+
+
+
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
+        
+        clock_t clocks = clock();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        if (fpsCounter == FPS_AVERAGE-1) {
+
+            double elapsedSeconds = double(clocks - clockLastRefresh) / double(CLOCKS_PER_SEC);
+            std::cout << 1.0 / elapsedSeconds << " fps" << std::endl;
+            alternator = !alternator;
+            fpsCounter = 0;
+        }
+
+        fpsCounter++;
+        clockLastRefresh = clocks;
+
+        if (alternator) {
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+        else {
+            glClearColor(0.0f, 0.3f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
 
         glfwSwapBuffers(window);
     }
@@ -124,4 +171,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     // closing the application
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+
+    // Change colour of background
+    /*if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+        glfwSetW
+    }*/
 }
