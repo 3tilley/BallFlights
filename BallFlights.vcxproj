@@ -73,8 +73,8 @@
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Max\Documents\GitHub\BallFlights\glew-2.0.0\include;C:\Users\Max\Documents\GitHub\BallFlights\glfw-3.2.1.bin.WIN64\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>C:\Users\Max\Documents\GitHub\BallFlights\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Max\Documents\GitHub\BallFlights\glew-2.0.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)glew-2.0.0\include;$(ProjectDir)glfw-3.2.1.bin.WIN64\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)glfw-3.2.1.bin.WIN64\lib-vc2015;$(ProjectDir)glew-2.0.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

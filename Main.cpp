@@ -6,7 +6,7 @@
 #include <GLFW\glfw3.h>
 
 bool const FULLSCREEN = false;
-bool const ENABLE_VSYNC = true;
+bool const ENABLE_VSYNC = false;
 
 class Vector3 {
     std::array<double, 3> e;
