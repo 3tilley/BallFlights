@@ -90,7 +90,7 @@ int main() {
 
     // Make the window
     if (FULLSCREEN) {
-        window = glfwCreateWindow(2560, 1440, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
+        window = glfwCreateWindow(2560, 1440, "BallFlights", glfwGetPrimaryMonitor(), nullptr);
     }
     else {
         window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
@@ -125,9 +125,10 @@ int main() {
     }
 
     bool alternator = true;
+    
     int fpsCounter = 0;
     clock_t clockLastRefresh = clock();
-    int FPS_AVERAGE = 100;
+    double FPS_AVERAGE_SECONDS = 0.5;
 
 
 
@@ -137,16 +138,17 @@ int main() {
         
         clock_t clocks = clock();
 
-        if (fpsCounter == FPS_AVERAGE-1) {
+        double elapsedSeconds = double(clocks - clockLastRefresh) / double(CLOCKS_PER_SEC);
 
-            double elapsedSeconds = double(clocks - clockLastRefresh) / double(CLOCKS_PER_SEC);
-            std::cout << 1.0 / elapsedSeconds << " fps" << std::endl;
+        if (elapsedSeconds > FPS_AVERAGE_SECONDS) {
+
+            std::cout << double(fpsCounter) / FPS_AVERAGE_SECONDS << " fps" << std::endl;
             alternator = !alternator;
             fpsCounter = 0;
+            clockLastRefresh = clocks;
         }
 
         fpsCounter++;
-        clockLastRefresh = clocks;
 
         if (alternator) {
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
